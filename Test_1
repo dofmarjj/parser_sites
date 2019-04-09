@@ -1,1 +1,17 @@
-
+import requests
+from bs4 import BeautifulSoup
+BASE_URL = 'https://www.work.ua'
+DNIPRO_PATH = '/jobs-dnipro/'
+RESULT = {}
+START_URL = BASE_URL + DNIPRO_PATH
+response = requests.get(START_URL)
+assert response.status_code == 200
+soup = BeautifulSoup(response.text, 'html.parser')
+cards = soup.find_all("div", class_="card card-hover card-visited wordwrap job-link")
+counter = 0
+for card in cards:
+  card_a = card.find('h2').find('a')
+  RESULT[card_a['href']] = card_a.text
+  counter += 1
+print(RESULT)
+print(counter)
